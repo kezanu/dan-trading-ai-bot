@@ -1,4 +1,4 @@
-# finviz_tradingview_bot.py
+
 import requests
 from tradingview_ta import TA_Handler, Interval
 from datetime import datetime
@@ -10,7 +10,7 @@ WEBHOOK_URL = "https://hook.eu2.make.com/a2sx28unpo3p27etd4gxlgyofssyd94z"
 INTERVAL = Interval.INTERVAL_1_HOUR
 
 TICKERS_FIXE = [
-    {"symbol": "US30", "exchange": "FOREXCOM", "screener": "forex"},
+    {"symbol": "US30", "exchange": "CURRENCYCOM", "screener": "forex"},
     {"symbol": "XAUUSD", "exchange": "OANDA", "screener": "forex"},
     {"symbol": "EURUSD", "exchange": "OANDA", "screener": "forex"},
     {"symbol": "GBPJPY", "exchange": "OANDA", "screener": "forex"},
@@ -89,7 +89,8 @@ if __name__ == "__main__":
     print("Start analiză la:", datetime.now())
     tickere = TICKERS_FIXE + get_finviz_tickers()
     for t in tickere:
-        rezultat = analyze_ticker(t)
-        if rezultat:
-            trimite_webhook(rezultat)
+        if t['symbol'].lower() not in ["usa"]:  # filtru simboluri invalide
+            rezultat = analyze_ticker(t)
+            if rezultat:
+                trimite_webhook(rezultat)
     print("✅ Toate alertele au fost procesate!")
